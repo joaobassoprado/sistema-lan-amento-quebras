@@ -49,7 +49,7 @@ $save = function () {
             'data_multa' => ['required', 'date'],
             'responsavel' => ['required'],
             'propriedade' => ['required'],
-            'placa' => ['nullable'],
+            'placa' => ['required'],
             'auto_infracao' => [
                 'required',
                 Rule::unique('multas', 'auto_infracao')->whereNull('deleted_at'),
@@ -66,6 +66,7 @@ $save = function () {
             'auto_infracao.required' => 'Informe o n° da auto infração.',
             'auto_infracao.unique' => 'Auto infração já utilizada.',
             'cod_infracao.required' => 'Informe o código da infração',
+            'placa.required' => 'Placa é obrigatória',
             'valor_pago.required' => 'Informe o valor da multa',
             'valor_pago.min' => 'Valor de frete não pode ser vazio.',
         ]
@@ -127,7 +128,7 @@ layout('layouts.app');
                           :options="$this->propriedades" wire:model.live="propriedade" icon="o-building-office"/>
 
                 <x-input label="Placa do Veículo" wire:model="placa"
-                         class="uppercase !flex !flex-1" icon="m-table-cells" hint="Opcional"/>
+                         class="uppercase !flex !flex-1" icon="m-table-cells"/>
             </div>
             <x-select label="Responsável:" wire:model="responsavel" placeholder="Selecione o responsável..." placeholder-value="0"
                       :options="$this->usuarios" wire:model.live="responsavel" icon="o-user"/>
