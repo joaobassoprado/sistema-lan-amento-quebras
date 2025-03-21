@@ -30,7 +30,7 @@ mount(function () {
     $this->multa = Multa::find($this->id);
 
     $this->unidades = [['id' => 1, 'name' => 'Virginia Maringá'], ['id' => 3, 'name' => 'Virginia Guarapuava'], ['id' => 7, 'name' => 'Virginia Ponta Grossa'], ['id' => 10, 'name' => 'Virginia Norte Pioneiro'],
-        ['id' => 11, 'name' => 'Varejo Apucarana'], ['id' => 12, 'name' => 'Varejo Maringá'], ['id' => 13, 'name' => 'Varejo Ponta Grossa'], ['id' => 14, 'name' => 'Varejo Umuarama']];
+        ['id' => 11, 'name' => 'Varejo Apucarana'], ['id' => 12, 'name' => 'Varejo Maringá'], ['id' => 13, 'name' => 'Varejo Ponta Grossa'], ['id' => 14, 'name' => 'Varejo Umuarama'], ['id' => 15, 'name' => 'Virginia Refrigerados']];
 
     $this->usuarios = User::whereNull('deleted_at')->orderBy('nome_completo', 'asc')->get()->map(fn($usuario) => ['id' => $usuario->name, 'name' => $usuario->nome_completo]);
 

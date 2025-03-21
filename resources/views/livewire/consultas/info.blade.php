@@ -85,6 +85,7 @@ layout('layouts.app');
                                 12 => 'Varejo Maringá',
                                 13 => 'Varejo Ponta Grossa',
                                 14 => 'Varejo Umuarama',
+                                15 => 'Virginia Refrigerados',
                                 default => $multa->unidade
                             } }}"
             />
