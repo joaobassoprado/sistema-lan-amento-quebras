@@ -54,6 +54,7 @@ rules([
     'unidade' => ['nullable'],
     'data_ciencia' => ['nullable'],
     'data_multa' => ['nullable'],
+    'data_limite' => ['nullable'],
     'responsavel' => ['nullable'],
     'corresponsavel' => ['nullable'],
     'propriedade' => ['nullable'],
@@ -70,9 +71,9 @@ $update = function () {
     try {
         $data = $this->validate();
 
-        if (isset($data['data_multa'])) {
-            $data['data_limite'] = Carbon::parse($data['data_multa'])->addDays(40)->format('Y-m-d\TH:i');
-        }
+//        if (isset($data['data_multa'])) {
+//            $data['data_limite'] = Carbon::parse($data['data_multa'])->addDays(40)->format('Y-m-d\TH:i');
+//        }
 
         foreach ($data as $key => $value) {
             if ($value === '') {
@@ -112,6 +113,8 @@ layout('layouts.app');
                 <x-datetime label="Data da ciência da multa:" wire:model="data_ciencia" icon="o-calendar"
                             type="datetime-local"/>
                 <x-datetime label="Data da infração:" wire:model="data_multa" icon="o-calendar"
+                            type="datetime-local"/>
+                <x-datetime label="Data Limite:" wire:model="data_limite" icon="o-calendar"
                             type="datetime-local"/>
                 <x-select label="Propriedade:" placeholder="Selecione a proprietária..." placeholder-value="0"
                           :options="$this->propriedades" wire:model.live="propriedade" icon="o-building-office"/>

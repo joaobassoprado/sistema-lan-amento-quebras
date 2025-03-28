@@ -21,7 +21,7 @@ state(['id'])->url();
 state(['all_data' => []]);
 
 state(['unidades' => [], 'propriedades' => [], 'locais' => [], 'status_finals' => [], 'nao_identificados' => [], 'nao_descontos' => [], 'verifyStatusFinal' => []]);
-state(['multa', 'status_final', 'unidade', 'data_ciencia', 'descontado', 'nao_identificacao', 'nao_desconto', 'cod_triare', 'data_multa', 'data_limite', 'responsavel', 'responsavel', 'propriedade', 'auto_infracao', 'finalizado_por']);
+state(['multa', 'status_final', 'unidade', 'data_ciencia', 'descontado', 'nao_identificacao', 'nao_desconto', 'cod_triare', 'observacao', 'data_multa', 'data_limite', 'responsavel', 'responsavel', 'propriedade', 'auto_infracao', 'finalizado_por']);
 
 mount(function () {
     if (!Gate::forUser(Auth::user())->allows('apps.view-any')) {
@@ -51,6 +51,7 @@ $finalize = function () {
             'nao_identificacao' => ['nullable', 'required_unless:status_final,1,2'],
             'nao_desconto' => ['nullable', 'required_unless:status_final,1,3'],
             'cod_triare' => ['required'],
+            'observacao' => ['nullable'],
         ],
         [
             'status_final.required' => 'Selecione o status final.',
@@ -68,6 +69,7 @@ $finalize = function () {
             'nao_identificacao' => $this->all_data['nao_identificacao'] ?? null,
             'nao_desconto' => $this->all_data['nao_desconto'] ?? null,
             'cod_triare' => $this->all_data['cod_triare'] ?? null,
+            'observacao' =>  $this->all_data['observacao'] ?? null,
             'data_finalizada' => Carbon::now(),
             'status' => 4,
             'finalizado_por' => Ad::username(),
@@ -148,8 +150,10 @@ layout('layouts.app');
                       :options="$this->nao_descontos" wire:model.live="nao_desconto" icon="o-document-text"/>
         @endif
 
-        <x-input label="Código Triare:" type='number' wire:model="cod_triare" placeholder="12345...."
+        <x-input class="mb-2" label="Código Triare:" type='number' wire:model="cod_triare" placeholder="12345..."
                  icon='o-computer-desktop'/>
+        <x-input label="Observação:" wire:model="observacao" placeholder="Informe aqui as observações sobre a multa..."
+                 icon='o-tag' hint="Opcional"/>
 
         <button type="button" style="background-color: green;"
                 class="w-full text-white font-bold p-2 rounded mt-2 btn-success" wire:click="finalize({{ $multa->id }})"

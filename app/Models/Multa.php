@@ -37,6 +37,7 @@ class Multa extends Model
         'nao_desconto',
         'descontado',
         'cod_triare',
+        'observacao',
         'data_finalizada',
         'finalizado_por',
         'created_by',
