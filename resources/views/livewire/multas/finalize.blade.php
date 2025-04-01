@@ -50,14 +50,14 @@ $finalize = function () {
             'descontado' => ['nullable'],
             'nao_identificacao' => ['nullable', 'required_unless:status_final,1,2'],
             'nao_desconto' => ['nullable', 'required_unless:status_final,1,3'],
-            'cod_triare' => ['required'],
+            'cod_triare' => ['nullable'],
             'observacao' => ['nullable'],
         ],
         [
             'status_final.required' => 'Selecione o status final.',
             'nao_identificacao.required_if' => 'Informe o motivo da não identificacão.',
             'nao_desconto.required_if' => 'Informe o motivo da não identificacão.',
-            'cod_triare.required' => 'Código triare é obrigatório.'
+//            'cod_triare.required' => 'Código triare é obrigatório.'
         ]
     );
     $this->all_data = array_merge($this->all_data, $data);
