@@ -45,7 +45,8 @@ $save = function () {
     $data = $this->validate(
         [
             'unidade' => ['required'],
-            'data_ciencia' => ['required', 'date'],
+            'data_ciencia' => ['nullable'],
+            'data_limite' => ['required', 'date'],
             'data_multa' => ['required', 'date'],
             'responsavel' => ['required'],
             'propriedade' => ['required'],
@@ -59,7 +60,7 @@ $save = function () {
         ],
         [
             'unidade.required' => 'Selecione a unidade.',
-            'data_ciencia.required' => 'Selecione a data de ciência da multa.',
+            'data_limite.required' => 'Selecione a data limite da multa.',
             'data_multa.required' => 'Selecione a data da infração.',
             'responsavel.required' => 'Informe o responsável.',
             'propriedade.required' => 'Selecione a unidade proprietária.',
@@ -72,7 +73,7 @@ $save = function () {
         ]
     );
 
-    $data['data_limite'] = Carbon::parse($data['data_multa'])->addDays(40)->format('Y-m-d');
+//    $data['data_limite'] = Carbon::parse($data['data_multa'])->addDays(40)->format('Y-m-d');
 
 
     $this->all_data = array_merge($this->all_data, $data);
@@ -80,7 +81,7 @@ $save = function () {
     try {
         Multa::create([
             'unidade' => $this->all_data['unidade'],
-            'data_ciencia' => $this->all_data['data_ciencia'],
+            'data_ciencia' => Carbon::now()->setTimezone('America/Sao_Paulo'),
             'data_multa' => $this->all_data['data_multa'],
             'data_limite' => $this->all_data['data_limite'],
             'responsavel' => $this->all_data['responsavel'],
@@ -103,6 +104,7 @@ $save = function () {
 
         return redirect(route('dashboard'));
     } catch (Exception $e) {
+        dd($e->getMessage());
         return $this->error('Não foi possível cadastrar a multa.');
     }
 };
@@ -118,7 +120,7 @@ layout('layouts.app');
         <div class="flex flex-col gap-2">
             <x-select label="Unidade:" placeholder="Selecione uma unidade..." placeholder-value="0"
                       :options="$this->unidades" wire:model.live="unidade" icon="o-building-office-2"/>
-            <x-datetime label="Data da ciência da multa:" wire:model="data_ciencia" icon="o-calendar"
+            <x-datetime label="Data limite da multa:" wire:model="data_limite" icon="o-calendar"
                         type="datetime-local"/>
             <x-datetime label="Data da infração:" wire:model="data_multa" icon="o-calendar"
                         type="datetime-local"/>
