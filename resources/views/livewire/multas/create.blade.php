@@ -120,11 +120,10 @@ layout('layouts.app');
         <div class="flex flex-col gap-2">
             <x-select label="Unidade:" placeholder="Selecione uma unidade..." placeholder-value="0"
                       :options="$this->unidades" wire:model.live="unidade" icon="o-building-office-2"/>
-            <x-datetime label="Data limite da multa:" wire:model="data_limite" icon="o-calendar"
-                        type="datetime-local"/>
             <x-datetime label="Data da infração:" wire:model="data_multa" icon="o-calendar"
                         type="datetime-local"/>
-
+            <x-datetime label="Data limite para indicação do condutor:" wire:model="data_limite" icon="o-calendar"
+                        type="datetime-local"/>
             <div class="flex flex-row w-full justify-between mt-2 -mb-4">
                 <x-select label="Proprietário:" placeholder="Selecione..." placeholder-value="0"
                           :options="$this->propriedades" wire:model.live="propriedade" icon="o-building-office"/>
@@ -132,7 +131,7 @@ layout('layouts.app');
                 <x-input label="Placa do Veículo" wire:model="placa"
                          class="uppercase !flex !flex-1" icon="m-table-cells"/>
             </div>
-            <x-select label="Responsável:" wire:model="responsavel" placeholder="Selecione o responsável..." placeholder-value="0"
+            <x-select class="mt-2" label="Responsável:" wire:model="responsavel" placeholder="Selecione o responsável..." placeholder-value="0"
                       :options="$this->usuarios" wire:model.live="responsavel" icon="o-user"/>
             <x-input label="N° Auto Infração:" wire:model.live.debounce.300ms="auto_infracao"
                      oninput="this.value = this.value.toUpperCase()"
