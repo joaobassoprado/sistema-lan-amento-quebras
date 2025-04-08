@@ -125,13 +125,13 @@ layout('layouts.app');
             <x-datetime label="Data limite para indicação do condutor:" wire:model="data_limite" icon="o-calendar"
                         type="datetime-local"/>
             <div class="flex flex-row w-full justify-between mt-2 -mb-4">
-                <x-select label="Proprietário:" placeholder="Selecione..." placeholder-value="0"
+                <x-select class="mb-2" label="Proprietário:" placeholder="Selecione..." placeholder-value="0"
                           :options="$this->propriedades" wire:model.live="propriedade" icon="o-building-office"/>
 
-                <x-input label="Placa do Veículo" wire:model="placa"
+                <x-input class="mb-2" label="Placa do Veículo" wire:model="placa"
                          class="uppercase !flex !flex-1" icon="m-table-cells"/>
             </div>
-            <x-select class="mt-2" label="Responsável:" wire:model="responsavel" placeholder="Selecione o responsável..." placeholder-value="0"
+            <x-select label="Responsável:" wire:model="responsavel" placeholder="Selecione o responsável..." placeholder-value="0"
                       :options="$this->usuarios" wire:model.live="responsavel" icon="o-user"/>
             <x-input label="N° Auto Infração:" wire:model.live.debounce.300ms="auto_infracao"
                      oninput="this.value = this.value.toUpperCase()"
