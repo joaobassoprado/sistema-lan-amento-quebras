@@ -69,7 +69,7 @@ $save = function () {
             'cod_infracao.required' => 'Informe o código da infração',
             'placa.required' => 'Placa é obrigatória',
             'valor_pago.required' => 'Informe o valor da multa',
-            'valor_pago.min' => 'Valor de frete não pode ser vazio.',
+            'valor_pago.min' => 'Valor da infração não pode ser vazio.',
         ]
     );
 

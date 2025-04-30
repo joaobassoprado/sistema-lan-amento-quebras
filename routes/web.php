@@ -89,4 +89,25 @@ Route::prefix('/consultas')->group(function (){
 
 });
 
+Route::prefix('/cadastros')->group(function () {
+    Route::prefix('/infracoes')->group(function () {
+        Volt::route('/', 'cadastros.infracoes.index')->middleware(['auth', 'verified'])->name('infracoes.index');
+        Volt::route('/nova', 'cadastros.infracoes.create')->middleware(['auth', 'verified'])->name('infracoes.create');
+        Volt::route('/editar/{id}', 'cadastros.infracoes.update')->middleware(['auth', 'verified'])->name('infracoes.update');
+    });
+
+    Route::prefix('/motivos')->group(function () {
+        Volt::route('/', 'cadastros.motivos.index')->middleware(['auth', 'verified'])->name('motivos.index');
+        Volt::route('/nova', 'cadastros.motivos.create')->middleware(['auth', 'verified'])->name('motivos.create');
+        Volt::route('/editar/{id}', 'cadastros.motivos.update')->middleware(['auth', 'verified'])->name('motivos.update');
+    });
+
+    Route::prefix('/propriedades')->group(function () {
+        Volt::route('/', 'cadastros.propriedades.index')->middleware(['auth', 'verified'])->name('propriedades.index');
+        Volt::route('/nova', 'cadastros.propriedades.create')->middleware(['auth', 'verified'])->name('propriedades.create');
+        Volt::route('/editar/{id}', 'cadastros.propriedades.update')->middleware(['auth', 'verified'])->name('propriedades.update');
+    });
+
+});
+
 require __DIR__ . '/auth.php';
