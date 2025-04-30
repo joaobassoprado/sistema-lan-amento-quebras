@@ -12,7 +12,7 @@ class Infracao extends Model
 
     protected $table = 'infracoes';
 
-    protected $fillable = ['cod', 'infracao', 'responsavel', 'valor', 'orgao_atuador', 'art_ctb', 'pontos', 'gravidade'];
+    protected $fillable = ['cod', 'infracao', 'responsavel', 'valor', 'orgao_atuador', 'art_ctb', 'pontos', 'gravidade', 'created_by', 'updated_by', 'deleted_by', 'deleted_at'];
 
     public function multas()
     {
