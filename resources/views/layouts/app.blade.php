@@ -195,7 +195,7 @@
                     <x-menu-sub title="Cadastros" icon="o-plus">
                         <x-menu-item title="Infrações" icon="o-clipboard-document" link="{{ route('infracoes.index') }}" />
 
-                        <x-menu-item title="Motivos" icon="o-chat-bubble-bottom-center-text" link="{{ route('motivos.index') }}" />
+                        <x-menu-item title="Motivos" icon="o-chat-bubble-bottom-center-text" link="{{ route('motivo_descontos.index') }}" />
 
                         <x-menu-item title="Propriedades" icon="o-building-office" link="{{ route('propriedades.index') }}" />
                     </x-menu-sub>

@@ -18,8 +18,8 @@ state(['responsaveis'=>[], 'gravidades'=>[], 'n_pontos'=>[], 'statuses'=>[]]);
 state(['filters', 'filter', 'cod','infracao','responsavel','orgao_atuador','art_ctb','pontos','gravidade','status']);
 
 mount(function () {
-    if (!Gate::forUser(Auth::user())->allows('admin.users.view-any')) {
-        return redirect(route('errors.403'));
+    if (!Gate::forUser(Auth::user())->allows('apps.view-any')) {
+        return redirect()->route('errors.403');
     }
     $this->responsaveis = [['id' => 'Proprietario', 'name' => 'Proprietário'], ['id' => 'Condutor', 'name' => 'Condutor']];
     $this->gravidades = [['id' => 'Leve', 'name' => 'Leve'], ['id' => 'Media', 'name' => 'Media'], ['id' => 'Grave', 'name' => 'Grave'],  ['id' => 'Gravissima', 'name' => 'Gravissíma']];
@@ -77,8 +77,8 @@ $resetarFiltros = function() {
 
 
 $inactiveInfracao = function ($id) {
-    if (!Gate::forUser(Auth::user())->allows('admin.users.delete')) {
-        return $this->error('Sem permissão para inativar infração.');
+    if (!Gate::forUser(Auth::user())->allows('apps.view-any')) {
+        return redirect()->route('errors.403');
     }
 
     try {
@@ -89,14 +89,13 @@ $inactiveInfracao = function ($id) {
 
         return $this->success('Infração inativado com sucesso');
     } catch (Exception $e) {
-        dd($e->getMessage());
         return $this->error('Não foi possível inativar infração.');
     }
 };
 
 $restoreInfracao = function ($id) {
-    if (!Gate::forUser(Auth::user())->allows('admin.users.restore')) {
-        return $this->error('Sem permissão para reativar infração.');
+    if (!Gate::forUser(Auth::user())->allows('apps.view-any')) {
+        return redirect()->route('errors.403');
     }
 
     try {
