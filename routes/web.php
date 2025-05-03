@@ -102,6 +102,12 @@ Route::prefix('/cadastros')->group(function () {
         Volt::route('/editar/{id}', 'cadastros.motivo_descontos.update')->middleware(['auth', 'verified'])->name('motivo_descontos.update');
     });
 
+    Route::prefix('/motivo_identificacao')->group(function () {
+        Volt::route('/', 'cadastros.motivo_identificado.index')->middleware(['auth', 'verified'])->name('motivo_identificado.index');
+        Volt::route('/nova', 'cadastros.motivo_identificado.create')->middleware(['auth', 'verified'])->name('motivo_identificado.create');
+        Volt::route('/editar/{id}', 'cadastros.motivo_identificado.update')->middleware(['auth', 'verified'])->name('motivo_identificado.update');
+    });
+
     Route::prefix('/propriedades')->group(function () {
         Volt::route('/', 'cadastros.propriedades.index')->middleware(['auth', 'verified'])->name('propriedades.index');
         Volt::route('/nova', 'cadastros.propriedades.create')->middleware(['auth', 'verified'])->name('propriedades.create');
