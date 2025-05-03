@@ -19,7 +19,6 @@ state(['filters', 'filter', 'cod','infracao','responsavel','orgao_atuador','art_
 
 
 mount(function () {
-    }
     $this->responsaveis = [['id' => 'Proprietario', 'name' => 'Proprietário'], ['id' => 'Condutor', 'name' => 'Condutor']];
     $this->gravidades = [['id' => 'Leve', 'name' => 'Leve'], ['id' => 'Media', 'name' => 'Media'], ['id' => 'Grave', 'name' => 'Grave'],  ['id' => 'Gravissima', 'name' => 'Gravissíma']];
     $this->n_pontos = [['id' => '3', 'name' => '3'], ['id' => '4', 'name' => '4'], ['id' => '5', 'name' => '5'], ['id' => '7', 'name' => '7']];
