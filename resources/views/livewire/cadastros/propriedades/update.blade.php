@@ -51,7 +51,6 @@ $update = function () {
 
         return redirect(route('propriedades.index'));
     } catch (Exception $e) {
-        dd($e->getMessage());
         return $this->error('Não foi possível editar usuário.');
     }
 };

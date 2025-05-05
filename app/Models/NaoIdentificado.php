@@ -10,7 +10,7 @@ class NaoIdentificado extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['status_name', 'created_by', 'updated_by', 'deleted_by', 'deleted_at'];
+    protected $fillable = ['justificativa', 'created_by', 'updated_by', 'deleted_by', 'deleted_at'];
 
     public function multas()
     {
