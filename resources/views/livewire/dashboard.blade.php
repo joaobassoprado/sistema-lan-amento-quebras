@@ -55,7 +55,7 @@ mount(function () {
     $this->propriedade = $filters['propriedade'] ?? null;
     $this->auto_infracao = $filters['auto_infracao'] ?? null;
     $this->condutor = $filters['condutor'] ?? null;
-
+    $this->placa = $filters['placa'] ?? null;
 });
 
 with(function () {
@@ -69,6 +69,7 @@ with(function () {
         ->when($this->propriedade, fn($query) => $query->where('propriedade', $this->propriedade))
         ->when($this->auto_infracao, fn($query) => $query->where('auto_infracao', 'LIKE', "%{$this->auto_infracao}%"))
         ->when($this->condutor, fn($query) => $query->where('condutor', 'LIKE', "%{$this->condutor}%"))
+        ->when($this->placa, fn($query) => $query->where('placa', 'LIKE', "%{$this->placa}%"))
         ->when($this->data_identificacao, fn($query) => $query->whereDate('data_identificacao', $this->data_identificacao))
         ->when($this->data_identificacao_detran, fn($query) => $query->whereDate('data_identificacao_detran', $this->data_identificacao_detran))
         ->when($this->status, fn($query) => $query->where('status', $this->status))
@@ -90,14 +91,14 @@ $filtrar = function () {
         'propriedade' => $this->propriedade,
         'auto_infracao' => $this->auto_infracao,
         'condutor' => $this->condutor,
-
+        'placa' => $this->placa,
     ]);
 };
 
 $resetarFiltros = function () {
     Session::forget('filters');
 
-    return $this->reset(['unidade', 'data_multa', 'data_limite', 'status', 'responsavel', 'propriedade', 'auto_infracao', 'condutor']);
+    return $this->reset(['unidade', 'data_multa', 'data_limite', 'status', 'responsavel', 'propriedade', 'auto_infracao', 'condutor', 'placa']);
 };
 
 $inativarMulta = function ($id) {
@@ -261,7 +262,7 @@ layout('layouts.app');
                       wire:click="openModalMulta"/>
         </div>
 
-        <div class="grid grid-cols-5 gap-4 bg-gray-100 p-4 shadow rounded mt-2">
+        <div class="grid grid-cols-6 gap-4 bg-gray-100 p-4 shadow rounded mt-2">
             <x-select label="Filtrar por unidade:" :options="$this->unidades" wire:model="unidade"
                       placeholder="Selecione uma unidade..." placeholder-value="0"/>
             <x-datetime label="Filtrar por Data da Multa:" wire:model="data_multa" placeholder="Data Multa"/>
@@ -276,6 +277,7 @@ layout('layouts.app');
                       placeholder="Selecione a propriedade/local" placeholder-value="0"/>
             <x-input label="Filtrar por N° Auto Infração:" placeholder="N° Auto Infração" wire:model="auto_infracao"/>
             <x-input label="Filtrar por condutor:" placeholder="Nome do condutor..." wire:model.lazy="condutor"/>
+            <x-input label="Filtrar por placa:" placeholder="Insira a placa..." wire:model.lazy="placa"/>
             <x-button class="btn-outline mt-7" icon="o-x-circle" label="LIMPAR FILTROS" wire:click="resetarFiltros"/>
             <x-button class="btn-outline mt-7" icon="o-adjustments-horizontal" label="FILTRAR"
                       wire:click="filtrar"/>
