@@ -413,9 +413,7 @@ layout('layouts.app');
                                 @break
                         @endswitch
                     </td>
-                    <td class="py-2 px-4 border-b text-center">
-                        {{ substr($multa->placa, 0, 3) . '-' . substr($multa->placa, 3) }}
-                    </td>
+                    <td class="py-2 px-4 border-b text-center">{{ $multa->placa }}</td>
                     <td class="py-2 px-4 border-b text-center relative group cursor-pointer">
                         <a href="{{ route('multas.info', ['id' => $multa->id]) }}">{{ $multa->auto_infracao }}</a>
                         <x-button icon="o-information-circle"
