@@ -25,7 +25,7 @@ state(['modal_ident_detran' => false]);
 state(['modal_corresponsavel' => false]);
 
 state(['unidades' => [], 'propriedades' => [], 'statuses' => [], 'status_finals' => [], 'usuarios' => []]);
-state(['filters', 'unidade', 'multa', 'data_ciencia', 'data_multa', 'data_limite', 'responsavel', 'corresponsavel', 'propriedade', 'auto_infracao', 'valor_pago', 'condutor', 'condutor_modal', 'data_identificacao', 'identificador_interno', 'data_identificacao_detran', 'identificador_detran', 'status', 'status_final', 'corresponsavel']);
+state(['filters', 'unidade', 'multa', 'data_ciencia', 'data_multa', 'data_limite', 'responsavel', 'corresponsavel', 'propriedade', 'auto_infracao', 'valor_pago', 'condutor', 'placa', 'condutor_modal', 'data_identificacao', 'identificador_interno', 'data_identificacao_detran', 'identificador_detran', 'status', 'status_final', 'corresponsavel']);
 
 
 mount(function () {
