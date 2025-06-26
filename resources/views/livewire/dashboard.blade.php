@@ -277,7 +277,7 @@ layout('layouts.app');
                       placeholder="Selecione a propriedade/local" placeholder-value="0"/>
             <x-input label="Filtrar por N° Auto Infração:" placeholder="N° Auto Infração" wire:model="auto_infracao"/>
             <x-input label="Filtrar por condutor:" placeholder="Nome do condutor..." wire:model.lazy="condutor"/>
-            <x-input class="uppercase label="Filtrar por placa:" placeholder="Insira a placa..." wire:model.lazy="placa"/>
+            <x-input class="uppercase" label="Filtrar por placa:" placeholder="Insira a placa..." wire:model.lazy="placa"/>
             <x-button class="btn-outline mt-7" icon="o-x-circle" label="LIMPAR FILTROS" wire:click="resetarFiltros"/>
             <x-button class="btn-outline mt-7" icon="o-adjustments-horizontal" label="FILTRAR"
                       wire:click="filtrar"/>
