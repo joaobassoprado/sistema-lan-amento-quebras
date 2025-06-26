@@ -334,7 +334,9 @@ layout('layouts.app');
                                 {{$multa->unidade}}
                         @endswitch
                     </td>
-                    <td class="py-2 px-4 border-b text-center">{{ $multa->placa }}</td>
+                    <td class="py-2 px-4 border-b text-center">
+                        {{ substr($multa->placa, 0, 3) . '-' . substr($multa->placa, 3) }}
+                    </td>
                     <td class="py-2 px-4 border-b text-center">{{ $multa->auto_infracao }}</td>
                     <td class="py-2 px-4 border-b text-center">
                         {{ $multa->valor_pago !== null ? 'R$' . number_format($multa->valor_pago, 2, ',', '.') : 'Não Informado' }}

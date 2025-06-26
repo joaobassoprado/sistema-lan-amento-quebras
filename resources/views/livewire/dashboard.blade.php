@@ -294,6 +294,7 @@ layout('layouts.app');
                 <th class="py-2 px-4 border-b">Status</th>
                 <th class="py-2 px-4 border-b">Responsável</th>
                 <th class="py-2 px-4 border-b">Propriedade/Local</th>
+                <th class="py-2 px-4 border-b">Placa</th>
                 <th class="py-2 px-4 border-b">N° Auto Infração</th>
                 <th class="py-2 px-4 border-b">Valor</th>
                 <th class="py-2 px-4 border-b">Condutor</th>
@@ -411,6 +412,9 @@ layout('layouts.app');
                                 Virginia Refrigerados
                                 @break
                         @endswitch
+                    </td>
+                    <td class="py-2 px-4 border-b text-center">
+                        {{ substr($multa->placa, 0, 3) . '-' . substr($multa->placa, 3) }}
                     </td>
                     <td class="py-2 px-4 border-b text-center relative group cursor-pointer">
                         <a href="{{ route('multas.info', ['id' => $multa->id]) }}">{{ $multa->auto_infracao }}</a>
