@@ -24,7 +24,7 @@ state(['modal_ident_detran' => false]);
 
 
 state(['unidades' => [], 'propriedades' => [], 'statuses' => [], 'status_finals' => []]);
-state(['filters', 'unidade', 'multa', 'data_ciencia', 'data_multa', 'data_limite', 'responsavel', 'propriedade', 'local', 'auto_infracao', 'condutor', 'data_identificacao', 'data_identificacao_detran', 'status', 'status_final']);
+state(['filters', 'unidade', 'multa', 'data_ciencia', 'data_multa', 'data_limite', 'responsavel', 'propriedade', 'local', 'auto_infracao', 'condutor', 'data_identificacao', 'data_identificacao_detran', 'status', 'status_final', 'placa']);
 
 
 mount(function () {
@@ -67,6 +67,7 @@ with(function () {
         ->when($this->local, fn($query) => $query->where('propriedade', $this->local))
         ->when($this->auto_infracao, fn($query) => $query->where('auto_infracao', 'LIKE', "%{$this->auto_infracao}%"))
         ->when($this->condutor, fn($query) => $query->where('condutor', 'LIKE', "%{$this->condutor}%"))
+        ->when($this->placa, fn($query) => $query->where('placa', 'LIKE', "%{$this->placa}%"))
         ->when($this->data_identificacao, fn($query) => $query->whereDate('data_identificacao', $this->data_identificacao))
         ->when($this->data_identificacao_detran, fn($query) => $query->whereDate('data_identificacao_detran', $this->data_identificacao_detran))
         ->when($this->status, fn($query) => $query->where('status', $this->status))
@@ -88,14 +89,14 @@ $filtrar = function () {
         'propriedade' => $this->propriedade,
         'auto_infracao' => $this->auto_infracao,
         'condutor' => $this->condutor,
-
+        'placa' => $this->placa,
     ]);
 };
 
 $resetarFiltros = function() {
     Session::forget('filters');
 
-    return $this->reset(['unidade', 'data_multa', 'data_limite', 'status_final', 'responsavel', 'propriedade', 'auto_infracao', 'condutor']);
+    return $this->reset(['unidade', 'data_multa', 'data_limite', 'status_final', 'responsavel', 'propriedade', 'auto_infracao', 'condutor', 'placa']);
 
 };
 
@@ -213,7 +214,7 @@ layout('layouts.app');
                       link="{{route('dashboard')}}"/>
         </div>
 
-        <div class="grid grid-cols-5 gap-4 bg-gray-100 p-4 shadow rounded mt-2">
+        <div class="grid grid-cols-6 gap-4 bg-gray-100 p-4 shadow rounded mt-2">
             <x-select label="Filtrar por unidade:" :options="$this->unidades" wire:model="unidade"
                       placeholder="Selecione uma unidade..." placeholder-value="0" />
             <x-datetime label="Filtrar por Data da Multa:" wire:model="data_multa" placeholder="Data Multa" />
@@ -225,6 +226,7 @@ layout('layouts.app');
                       placeholder="Selecione a propriedade/local" placeholder-value="0" />
             <x-input label="Filtrar por N° Auto Infração:" placeholder="N° Auto Infração" wire:model="auto_infracao"/>
             <x-input label="Filtrar por condutor:" placeholder="Nome do condutor..." wire:model.lazy="condutor" />
+            <x-input class="uppercase" label="Filtrar por placa:" icon="m-table-cells" wire:model.lazy="placa"/>
             <x-button class="btn-outline mt-7" icon="o-x-circle" label="LIMPAR FILTROS" wire:click="resetarFiltros" />
             <x-button class="btn-outline mt-7" icon="o-adjustments-horizontal" label="FILTRAR"
                       wire:click="filtrar" />
@@ -239,6 +241,7 @@ layout('layouts.app');
                 <th class="py-2 px-4 border-b">Status Final</th>
                 <th class="py-2 px-4 border-b">Responsável</th>
                 <th class="py-2 px-4 border-b">Propriedade/Local</th>
+                <th class="py-2 px-4 border-b">Placa</th>
                 <th class="py-2 px-4 border-b">N° Auto Infração</th>
                 <th class="py-2 px-4 border-b">Valor</th>
                 <th class="py-2 px-4 border-b">Condutor</th>
@@ -331,6 +334,7 @@ layout('layouts.app');
                                 {{$multa->unidade}}
                         @endswitch
                     </td>
+                    <td class="py-2 px-4 border-b text-center">{{ $multa->placa }}</td>
                     <td class="py-2 px-4 border-b text-center">{{ $multa->auto_infracao }}</td>
                     <td class="py-2 px-4 border-b text-center">
                         {{ $multa->valor_pago !== null ? 'R$' . number_format($multa->valor_pago, 2, ',', '.') : 'Não Informado' }}
