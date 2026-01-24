@@ -66,3 +66,109 @@ Certifique-se de ter instalados:
 git clone <url-do-repositorio>
 cd <nome-do-projeto>
 ```
+
+### 2. Subir os containers
+
+```bash
+docker compose up -d
+```
+
+### 3. Instalar dependências do backend (Laravel)
+
+```bash
+docker compose exec app composer install
+```
+
+### 4. Copiar o .env
+
+```bash
+docker compose exec app cp .env.example .env
+```
+
+### 5. Gerar a key da aplicação
+
+```bash
+docker compose exec app php artisan key:generate
+```
+
+### 6. Instalar dependências do frontend
+
+```bash
+npm install
+```
+
+### 7. Rodar o ambiente de desenvolvimento
+
+```bash
+npm run dev
+```
+
+### 8. Rodar migrações
+
+```bash
+docker compose exec app php artisan migrate
+```
+
+---
+
+## 📁 Estrutura Principal do Projeto
+
+```
+/app
+/resources
+    /views
+    /css
+    /js
+/routes
+/database
+```
+
+---
+
+## 🔧 Comandos Úteis
+
+Rodar migrações:
+
+```bash
+php artisan migrate
+```
+
+Rodar servidor interno:
+
+```bash
+php artisan serve
+```
+
+Build do front-end:
+
+```bash
+npm run build
+```
+
+Subir containers:
+
+```bash
+docker compose up -d
+```
+
+Parar containers:
+
+```bash
+docker compose down
+```
+
+Acessar container:
+
+```bash
+docker compose exec app bash
+```
+
+---
+
+## 📌 Observações
+
+- Todo acesso ao sistema é feito via login do Active Directory.
+- Administradores possuem permissões completas.
+- Usuários padrão podem realizar lançamentos conforme permissões liberadas.
+- Sistema desenvolvido para uso interno da empresa.
+- É necessário possuir Docker, Docker Compose, NodeJS e NPM instalados para rodar o projeto corretamente.
