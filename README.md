@@ -1,63 +1,68 @@
-# 🚗 **Gestão de Multas**
+# Sistema de Lançamento de Quebras – Laravel 10
 
-## 🎯 **1. Seleção de Unidade**
+Este sistema foi desenvolvido para **registrar e gerenciar quebras de garrafas e produtos** da empresa, garantindo rastreabilidade, controle e organização dos lançamentos realizados pelos colaboradores.
 
-✅ Permitir ao usuário selecionar a unidade responsável pela gestão da multa.
-
----
-
-## 🔄 **2. Controle de Status**
-
-O sistema deve gerenciar o status de cada multa, com as seguintes etapas principais:
-
-### 📌 **2.1 Ciência (Prazo: 2 dias)**
-
-🗓 **Informações registradas:**
-
--   **📅 Data de Ciência:** Data em que a multa foi lançada no sistema.
--   **⚠️ Data da Multa:** Data da infração.
--   **⏳ Data Limite:** Calculada automaticamente como **40 dias após a data da infração**.
--   **👤 Responsável:** Pessoa responsável pela gestão da multa.
--   **🚗 Propriedade:** Identificação do dono e local do veículo (campo de seleção).
--   **📄 Número do Auto de Infração:** Código da infração.
--   **📝 Usuário:** Quem realizou o registro no sistema.
+O projeto utiliza **Laravel 10.48.28**, **Docker**, **Vite**, **TailwindCSS** e autenticação via **Active Directory (AD)**, com controle hierárquico de permissões.
 
 ---
 
-### 📌 **2.2 Identificação Interna (Prazo: 7 dias)**
+## 🚀 Tecnologias Utilizadas
 
-🗓 **Informações registradas:**
-
--   **👤 Nome do Condutor:** Seleção a partir de um cadastro pré-existente.
--   **📅 Data de Identificação:** Data em que o condutor foi identificado internamente.
-
----
-
-### 📌 **2.3 Identificação no DETRAN (Prazo: 2 dias)**
-
-🗓 **Informações registradas:**
-
--   **👤 Nome do Condutor:** Informado automaticamente com base no registro interno.
--   **📅 Data de Identificação no DETRAN:** Data em que a identificação foi realizada no sistema do DETRAN.
+- **Laravel 10.48.28**
+- **PHP 8+**
+- **Docker & Docker Compose**
+- **MySQL / MariaDB**
+- **TailwindCSS**
+- **Vite**
+- **NPM / NodeJS**
+- **Autenticação via Active Directory (AD)**
+- **Hierarquia de acessos (Admin / Usuário Comum)**
 
 ---
 
-### 📌 **2.4 Status Final (Prazo: 4 dias)**
+## 🔐 Autenticação e Permissões
 
-🛠 Definir a resolução da multa com base na identificação e no desconto aplicável. As possibilidades incluem:
+O sistema utiliza:
 
-✔️ **Identificado e Descontado:**  
-🔹 Vale será enviado por meio do sistema **Triare** para solicitar o desconto em folha.
-
-❌ **Identificado e Não Descontado:**  
-🔹 Justificar por que o desconto não foi aplicado.
-
-❌ **Não Identificado e Descontado:**  
-🔹 Justificar a situação e identificar quem será responsabilizado pelo desconto.
-
-❌ **Não Identificado e Não Descontado:**  
-🔹 Justificar o motivo pelo qual o desconto não foi aplicado e quem deve ser responsabilizado.
+- Login integrado com **AD (Active Directory)**
+- Controle de permissões nativo:
+    - **Administrador** → possui acesso total ao sistema
+    - **Usuário Padrão** → permite lançar quebras e consultar relatórios liberados
 
 ---
 
-✅ **Essa estrutura garante clareza no fluxo de trabalho e facilita o gerenciamento eficiente das multas.** 🚀
+## 🧩 Funcionalidades do Sistema
+
+### ✔ Registro de Quebras
+
+- Cadastro de quebras de produtos e garrafas
+- Vínculo de produto, funcionário e quantidade
+- Setor, área, motivo, turno e observações
+- Registro automático da data do lançamento
+
+### ✔ Gerenciamento de Usuários
+
+- Login com AD
+- Definição de nível de permissão (admin / padrão)
+
+### ✔ Relatórios
+
+- Resumo de quebras por período
+- Filtro por setor, produto e funcionário
+- Consulta rápida e responsiva
+
+---
+
+## 🐳 Rodando o Projeto com Docker
+
+Certifique-se de ter instalados:
+
+- **Docker**
+- **Docker Compose**
+
+### 1. Clonar o repositório
+
+```bash
+git clone <url-do-repositorio>
+cd <nome-do-projeto>
+```

@@ -113,7 +113,8 @@
 
         #btnSalvar {
             padding: 8px 16px;
-            background-color: #28a745; /* Cor de sucesso (verde) */
+            background-color: #28a745;
+            /* Cor de sucesso (verde) */
             color: white;
             border: none;
             border-radius: 6px;
@@ -125,8 +126,6 @@
 
         #btnSalvar:hover {
             background-color: #218838;
-
-
     </style>
 
     @livewireStyles
@@ -140,13 +139,13 @@
             <label for="main-drawer" class="lg:hidden mr-3">
                 <x-icon name="o-bars-3" class="cursor-pointer" />
             </label>
-            Gestão de Multas
+            Quebras
         </x-slot:brand>
     </x-nav>
 
     <x-main with-nav full-width collapsed>
         <x-slot:sidebar drawer="main-drawer" collapsible class="bg-white text-dark shadow-xl mr-1" collapsed>
-            <div class="hidden-when-collapsed text-center  mx-4 mt-4 font-black text-3xl text-[#003CA2]">Gestão de Multas</div>
+            <div class="hidden-when-collapsed text-center  mx-4 mt-4 font-black text-3xl text-[#003CA2]">Quebras</div>
 
             <div class="display-when-collapsed mx-4 mt-3 font-black text-2xl text-[#003CA2]">GM</div>
 
@@ -160,7 +159,9 @@
                             @auth
                                 {{ Auth::user()->getName() }}
                             @else
-                                <script>window.location = "{{ route('login') }}";</script>
+                                <script>
+                                    window.location = "{{ route('login') }}";
+                                </script>
                             @endauth
                         </p>
                         {{-- @if (request()->session()->has('vgportal_perfil'))
@@ -169,7 +170,7 @@
                             </div>
                         @endif --}}
                         <div x-data="{}">
-                            <form method="POST" action="{{ route('logout') }}">
+                            <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <x-button label="SAIR" class="btn-sm w-[96px]" type="submit" />
                             </form>
@@ -188,20 +189,13 @@
                     </x-menu-sub>
                 @endif
 
-                <x-menu-item title="Painel de Multas" icon="o-clipboard-document-check" link="{{ route('dashboard') }}" />
+                <x-menu-item title="Lançar Quebra" icon="o-clipboard-document-check"
+                    link="{{ route('quebras.create') }}" />
 
-                <x-menu-item title="Consultar Finalizadas" icon="o-document-magnifying-glass" link="{{ route('consultas.index') }}" />
+                <x-menu-item title="Quebras Pendentes" icon="o-document-magnifying-glass"
+                    link="{{ route('quebras.pendentes') }}" />
 
-                    <x-menu-sub title="Cadastros" icon="o-plus">
-                        <x-menu-item title="Infrações" icon="o-clipboard-document" link="{{ route('infracoes.index') }}" />
-
-                        <x-menu-sub title="Motivos" icon="o-chat-bubble-bottom-center-text">
-                            <x-menu-item title="Não descontado" icon="o-currency-dollar" link="{{ route('motivo_descontos.index') }}" />
-                            <x-menu-item title="Não identificado" icon="o-question-mark-circle" link="{{ route('motivo_identificado.index') }}" />
-                        </x-menu-sub>
-
-                        <x-menu-item title="Propriedades" icon="o-building-office" link="{{ route('propriedades.index') }}" />
-                    </x-menu-sub>
+                <x-menu-item title="Resumo Quebras" icon="o-chart-bar" link="{{ route('quebras.resumo') }}" />
 
             </x-menu>
         </x-slot:sidebar>

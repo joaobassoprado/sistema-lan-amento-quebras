@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nao_identificados', function (Blueprint $table) {
+        Schema::create('produtos', function (Blueprint $table) {
             $table->id();
-            $table->string('justificativa');
-
-            $table->users_actions();
+            $table->string('codigo_externo')->unique();
+            $table->string('nome');
+            $table->tinyInteger('ativo')->default(1);
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nao_identificados');
+        Schema::dropIfExists('produtos');
     }
 };

@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="flex items-center justify-center select-none mb-[32px]">
         <div class="hidden-when-collapsed mx-3 mt-4 font-black text-[#003CA2]">
-            <h1 class="text-4xl ">Gestão de Multas</h1>
+            <h1 class="text-4xl ">Gestão de Vales</h1>
         </div>
     </div>
 

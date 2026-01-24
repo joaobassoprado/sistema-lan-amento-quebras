@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +11,6 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
     public function create(): View
     {
         return view('auth.login');
@@ -30,20 +25,28 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // OPCÃO 1: Se você quer que TODOS vejam a tela de boas-vindas com animação primeiro:
+        return redirect()->route('dashboard');
+
+        /* // OPÇÃO 2: Se você quiser manter a divisão por perfil, mas o "Padrão" ser a Boas-Vindas:
+        $user = $request->user();
+        $profileId = (int) $user->profile_id;
+
+        $rota = match ($profileId) {
+            3       => 'minhas-atribuicoes', 
+            4       => 'controle.abono',     
+            default => 'dashboard', // Alterado de 'vales.dashboard' para 'dashboard'
+        };
+
+        return redirect()->route($rota);
+        */
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }

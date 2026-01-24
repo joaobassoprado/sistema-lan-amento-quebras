@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nao_descontados', function (Blueprint $table) {
-            $table->id();
-            $table->string('justificativa');
-
-            $table->users_actions();
-            $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
+        Schema::table('uuid_on_quebras', function (Blueprint $table) {
+            //
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nao_descontados');
+        Schema::table('uuid_on_quebras', function (Blueprint $table) {
+            //
+        });
     }
 };

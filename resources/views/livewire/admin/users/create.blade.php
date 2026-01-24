@@ -66,15 +66,16 @@ layout('layouts.app');
         <form wire:submit.prevent="save">
             @csrf
             <div class="flex flex-col gap-2 bg-white mt-2 p-4 shadow rounded">
-                <x-input label="Usuário AD:" wire:model="name" icon="o-user" placeholder="nome.sobrenome"/>
+                <x-input label="Usuário AD:" wire:model="name" icon="o-user" placeholder="nome.sobrenome" />
 
-                <x-input label="Nome do Usuário:" wire:model="nome_completo" icon="o-user" placeholder="Ex: João da Silva"/>
+                <x-input label="Nome do Usuário:" wire:model="nome_completo" icon="o-user"
+                    placeholder="Ex: João da Silva" />
 
                 <x-select label="Perfil:" wire:model="profile" icon="o-cog-6-tooth" :options="$this->profiles"
-                          placeholder="Selecione um perfil..." placeholder-value="0"/>
+                    placeholder="Selecione um perfil..." placeholder-value="0" />
             </div>
 
-            <x-button class="btn-sm btn-success mt-2 w-full" label="SALVAR" icon="o-check" type="submit"/>
+            <x-button class="btn-sm btn-success mt-2 w-full" label="SALVAR" icon="o-check" type="submit" />
         </form>
     </div>
 </div>
