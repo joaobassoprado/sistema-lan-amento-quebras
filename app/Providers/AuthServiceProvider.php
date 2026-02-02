@@ -4,28 +4,35 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\User as LocalUser;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The model to policy mappings for the application.
-     *
-     * @var array<class-string, class-string>
-     */
-    protected $policies = [
-        //
-    ];
+    protected $policies = [];
 
-    /**
-     * Register any authentication / authorization services.
-     */
     public function boot(): void
     {
         $this->registerPolicies();
 
-        // 🔐 PERMISSÃO DE ADMIN (nome TEM que bater com a rota)
         Gate::define('admin-view-any', function ($user) {
-            return (int) $user->profile_id === 1;
+            
+            // Se o usuário vier do LDAP, buscamos o registro correspondente no MySQL
+            if (!($user instanceof LocalUser)) {
+                // O samaccountname[0] é o login (ex: pedro.techuk)
+                $login = $user->samaccountname[0] ?? null;
+
+                if (!$login) return false;
+
+                $user = LocalUser::where('name', $login)->first();
+            }
+
+            // Se não encontrou o usuário no banco local ou ele não tem perfil vinculado
+            if (!$user || !$user->profile) {
+                return false;
+            }
+
+            // Verifica se o nome do perfil é ADMINISTRADOR
+            return trim(strtoupper($user->profile->name)) === 'ADMINISTRADOR';
         });
     }
 }

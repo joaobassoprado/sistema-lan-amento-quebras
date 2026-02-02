@@ -26,19 +26,23 @@ class Quebra extends Model
     ];
 
     /**
-     * Produto da quebra
+     * Relacionamento com Produto
+     * * produto_id: chave estrangeira na tabela 'quebras'
+     * código: chave primária na tabela 'produtos' (conforme seu banco de dados)
      */
     public function produto()
     {
-        return $this->belongsTo(Produto::class);
+        return $this->belongsTo(Produto::class, 'produto_id', 'código');
     }
 
     /**
-     * Funcionário responsável
+     * Relacionamento com Funcionário
+     * * funcionario_id: chave estrangeira na tabela 'quebras'
+     * codigo: chave primária na tabela 'funcionarios'
      */
     public function funcionario()
     {
-        return $this->belongsTo(Funcionario::class);
+        return $this->belongsTo(Funcionario::class, 'funcionario_id', 'codigo');
     }
 
     /**

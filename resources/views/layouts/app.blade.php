@@ -15,10 +15,8 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7/inputmask.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7/inputmask.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/robsontenorio/mary@0.44.2/libs/currency/currency.js">
     </script>
-    {{-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
 
     <style>
         .toast {
@@ -65,7 +63,6 @@
             transform: translateX(24px);
         }
 
-
         .ts-control {
             border: none !important;
             display: flex !important;
@@ -96,12 +93,10 @@
         }
 
         .dark\:bg-gray-800 {
-            --tw-bg-opacity: 1;
             background-color: #fff !important;
         }
 
         .dark\:text-gray-400 {
-            --tw-text-opacity: 1;
             color: #2E2E2E !important;
         }
 
@@ -114,7 +109,6 @@
         #btnSalvar {
             padding: 8px 16px;
             background-color: #28a745;
-            /* Cor de sucesso (verde) */
             color: white;
             border: none;
             border-radius: 6px;
@@ -126,10 +120,10 @@
 
         #btnSalvar:hover {
             background-color: #218838;
+        }
     </style>
 
     @livewireStyles
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -145,8 +139,7 @@
 
     <x-main with-nav full-width collapsed>
         <x-slot:sidebar drawer="main-drawer" collapsible class="bg-white text-dark shadow-xl mr-1" collapsed>
-            <div class="hidden-when-collapsed text-center  mx-4 mt-4 font-black text-3xl text-[#003CA2]">Quebras</div>
-
+            <div class="hidden-when-collapsed text-center mx-4 mt-4 font-black text-3xl text-[#003CA2]">Quebras</div>
             <div class="display-when-collapsed mx-4 mt-3 font-black text-2xl text-[#003CA2]">GM</div>
 
             <div class="hidden-when-collapsed mx-4 mt-3 font-black text-sm">
@@ -164,13 +157,10 @@
                                 </script>
                             @endauth
                         </p>
-                        {{-- @if (request()->session()->has('vgportal_perfil'))
-                            <div class="flex justify-center p-2 mb-4 min-w-[80px]">
-                                {{ request()->session()->get('vgportal_perfil')->nome }}
-                            </div>
-                        @endif --}}
+
                         <div x-data="{}">
-                            <form method="POST" action="{{ route('login') }}">
+                            {{-- AJUSTADO: Rota alterada para 'logout' --}}
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-button label="SAIR" class="btn-sm w-[96px]" type="submit" />
                             </form>
@@ -183,7 +173,6 @@
                 @if (Gate::forUser(Auth::user())->allows('admin.view-any'))
                     <x-menu-sub title="Administrador" icon="o-cog-6-tooth">
                         <x-menu-item title="Usuários" icon="o-users" link="{{ route('admin.users.index') }}" />
-
                         <x-menu-item title="Exportar Dados" icon="o-arrow-up-on-square-stack"
                             link="{{ route('admin.exports.index') }}" />
                     </x-menu-sub>
@@ -191,12 +180,9 @@
 
                 <x-menu-item title="Lançar Quebra" icon="o-clipboard-document-check"
                     link="{{ route('quebras.create') }}" />
-
                 <x-menu-item title="Quebras Pendentes" icon="o-document-magnifying-glass"
                     link="{{ route('quebras.pendentes') }}" />
-
                 <x-menu-item title="Resumo Quebras" icon="o-chart-bar" link="{{ route('quebras.resumo') }}" />
-
             </x-menu>
         </x-slot:sidebar>
 
@@ -209,6 +195,5 @@
     @livewireScripts
     @livewireScriptConfig
 </body>
-
 
 </html>

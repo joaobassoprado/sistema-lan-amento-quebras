@@ -7,21 +7,11 @@ use Illuminate\Support\Facades\Gate;
 new class extends Component {
     public $quebraSelecionada = null;
     public $observacao = '';
-    public $permitido = false;
 
-    public function mount()
-    {
-        // Verificação CENTRAL de permissão
-        $this->permitido = Gate::allows('admin.view-any');
-    }
-
-    /**
-     * Lista de quebras (SÓ se permitido)
-     */
     public function getQuebrasProperty()
     {
-        if (!$this->permitido) {
-            return collect(); // evita erro silencioso
+        if (!Gate::allows('admin-view-any')) {
+            return collect();
         }
 
         return Quebra::with(['produto', 'funcionario'])
@@ -32,142 +22,140 @@ new class extends Component {
 
     public function selecionar($id)
     {
-        if (!$this->permitido) {
-            return;
-        }
-
         $this->quebraSelecionada = $id;
         $this->observacao = '';
     }
 
     public function aprovar()
     {
-        if (!$this->permitido || !$this->quebraSelecionada) {
+        if (!Gate::allows('admin-view-any')) {
             return;
         }
 
         $quebra = Quebra::findOrFail($this->quebraSelecionada);
-
-        if ($quebra->status !== 'pendente') {
-            return;
-        }
-
         $quebra->update([
             'status' => 'aprovada',
             'observacao' => $this->observacao,
         ]);
 
         $this->reset(['quebraSelecionada', 'observacao']);
-
-        session()->flash('success', 'Quebra aprovada com sucesso');
+        session()->flash('success', 'Quebra aprovada com sucesso!');
     }
 
     public function reprovar()
     {
-        if (!$this->permitido || !$this->quebraSelecionada) {
+        if (!Gate::allows('admin-view-any')) {
             return;
         }
 
         $quebra = Quebra::findOrFail($this->quebraSelecionada);
-
-        if ($quebra->status !== 'pendente') {
-            return;
-        }
-
         $quebra->update([
             'status' => 'reprovada',
             'observacao' => $this->observacao,
         ]);
 
         $this->reset(['quebraSelecionada', 'observacao']);
-
-        session()->flash('success', 'Quebra reprovada');
+        session()->flash('success', 'Quebra reprovada.');
     }
-};
-?>
+}; ?>
 
-{{-- =========================
-| USUÁRIO SEM PERMISSÃO
-========================= --}}
-@if (!$permitido)
-    <div class="min-h-screen flex items-center justify-center bg-gray-50">
-        <div class="max-w-md p-6 rounded-xl bg-yellow-100 border border-yellow-300 text-yellow-900 text-center shadow">
-            <h2 class="text-xl font-bold mb-3">Acesso restrito</h2>
-            <p>Solicite acesso ao TI da sua unidade.</p>
-        </div>
-    </div>
-@endif
+<div class="min-h-screen bg-gray-50 py-10 px-6">
+    <div class="max-w-6xl mx-auto">
 
-
-{{-- =========================
-| ADMINISTRADOR
-========================= --}}
-@if ($permitido)
-    <div>
-        <h1 class="text-2xl font-bold mb-6">Quebras Pendentes</h1>
-
-        @if (session()->has('success'))
-            <div class="mb-4 p-3 bg-green-100 rounded text-green-800">
-                {{ session('success') }}
+        @if (!Gate::allows('admin-view-any'))
+            {{-- MENSAGEM DE BLOQUEIO --}}
+            <div class="bg-white p-12 rounded-3xl shadow-xl border-2 border-dashed border-gray-200 text-center mt-20">
+                <div class="bg-amber-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <x-icon name="o-lock-closed" class="w-10 h-10 text-amber-600" />
+                </div>
+                <h2 class="text-2xl font-black text-gray-800 uppercase italic">Acesso Restrito</h2>
+                <p class="text-gray-500 mt-2 text-lg font-medium">Seu perfil atual não possui permissão para aprovar
+                    quebras.</p>
+                <div class="mt-6 inline-block bg-gray-100 px-6 py-3 rounded-2xl border border-gray-200">
+                    <p class="text-xs font-black text-gray-400 uppercase tracking-widest">Contate o administrador do
+                        sistema</p>
+                </div>
             </div>
-        @endif
+        @else
+            {{-- CONTEÚDO PARA ADMIN --}}
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-black text-gray-800 uppercase tracking-tighter">Aprovações Pendentes</h1>
+                <div class="bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-black uppercase">Painel Admin
+                </div>
+            </div>
 
-        <div class="bg-white rounded shadow overflow-x-auto">
-            <table class="min-w-full text-sm">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="p-3 text-left">Data</th>
-                        <th class="p-3 text-left">Produto</th>
-                        <th class="p-3 text-left">Qtd</th>
-                        <th class="p-3 text-left">Setor</th>
-                        <th class="p-3 text-left">Motivo</th>
-                        <th class="p-3 text-left">Funcionário</th>
-                        <th class="p-3 text-left">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($this->quebras as $q)
-                        <tr class="border-t">
-                            <td class="p-3">
-                                {{ $q->data ? \Carbon\Carbon::parse($q->data)->format('d/m/Y') : $q->created_at->format('d/m/Y') }}
-                            </td>
-                            <td class="p-3">{{ $q->produto->nome ?? '-' }}</td>
-                            <td class="p-3">{{ $q->quantidade }}</td>
-                            <td class="p-3">{{ $q->setor }}</td>
-                            <td class="p-3">{{ $q->motivo }}</td>
-                            <td class="p-3">{{ $q->funcionario->nome ?? '-' }}</td>
-                            <td class="p-3">
-                                <button class="text-blue-600 underline" wire:click="selecionar({{ $q->id }})">
-                                    Aprovar / Reprovar
-                                </button>
-                            </td>
+            @if (session()->has('success'))
+                <div class="mb-6 p-4 rounded-xl bg-green-50 text-green-700 border border-green-200 font-bold">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 border-b border-gray-100">
+                        <tr>
+                            <th class="p-4 text-xs font-black uppercase text-gray-400">Data</th>
+                            <th class="p-4 text-xs font-black uppercase text-gray-400">Produto</th>
+                            <th class="p-4 text-xs font-black uppercase text-gray-400 text-center">Qtd</th>
+                            <th class="p-4 text-xs font-black uppercase text-gray-400">Setor</th>
+                            <th class="p-4 text-xs font-black uppercase text-gray-400">Responsável</th>
+                            <th class="p-4 text-xs font-black uppercase text-gray-400 text-center">Ações</th>
                         </tr>
-
-                        @if ($quebraSelecionada === $q->id)
-                            <tr class="bg-gray-50">
-                                <td colspan="7" class="p-4">
-                                    <label class="block mb-2 font-medium">Observação</label>
-                                    <textarea wire:model="observacao" class="w-full border p-2 rounded mb-3"></textarea>
-
-                                    <button class="bg-green-600 text-white px-4 py-2 rounded mr-2" wire:click="aprovar">
-                                        Aprovar
-                                    </button>
-
-                                    <button class="bg-red-600 text-white px-4 py-2 rounded" wire:click="reprovar">
-                                        Reprovar
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse($this->quebras as $q)
+                            <tr class="hover:bg-gray-50/50 transition-colors">
+                                <td class="p-4 text-sm font-bold text-gray-600">{{ date('d/m/Y', strtotime($q->data)) }}
+                                </td>
+                                <td class="p-4">
+                                    <div class="text-sm font-black text-gray-800">{{ $q->produto->nome ?? 'N/A' }}</div>
+                                    <div class="text-[10px] text-gray-400 font-bold uppercase">{{ $q->motivo }}</div>
+                                </td>
+                                <td class="p-4 text-center font-black text-blue-600 text-lg">{{ $q->quantidade }}</td>
+                                <td class="p-4 text-xs font-bold uppercase text-gray-500">{{ $q->setor }}</td>
+                                <td class="p-4 text-xs font-bold uppercase text-gray-500">
+                                    {{ $q->funcionario->nome ?? 'N/A' }}</td>
+                                <td class="p-4 text-center">
+                                    <button wire:click="selecionar({{ $q->id }})"
+                                        class="bg-gray-900 text-white px-4 py-2 rounded-xl text-xs font-black hover:scale-105 transition-all uppercase tracking-tighter">
+                                        Analisar
                                     </button>
                                 </td>
                             </tr>
-                        @endif
-                    @empty
-                        <tr>
-                            <td colspan="7" class="p-6 text-center text-gray-500">
-                                Nenhuma quebra pendente
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+
+                            @if ($quebraSelecionada === $q->id)
+                                <tr class="bg-blue-50/30">
+                                    <td colspan="6" class="p-6">
+                                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-100">
+                                            <label
+                                                class="block text-[10px] font-black uppercase text-blue-600 mb-2">Observações
+                                                da Decisão</label>
+                                            <textarea wire:model="observacao" class="w-full rounded-xl border-gray-200 bg-gray-50 mb-4 focus:ring-blue-500 text-sm"
+                                                rows="2" placeholder="Digite o motivo da aprovação ou reprovação..."></textarea>
+                                            <div class="flex gap-3 justify-end">
+                                                <button wire:click="reprovar"
+                                                    class="px-6 py-2 bg-red-100 text-red-600 font-black rounded-xl text-xs uppercase hover:bg-red-200 transition-colors">Reprovar
+                                                    Quebra</button>
+                                                <button wire:click="aprovar"
+                                                    class="px-6 py-2 bg-green-600 text-white font-black rounded-xl text-xs uppercase shadow-lg shadow-green-200 hover:bg-green-700 transition-colors">Aprovar
+                                                    Registro</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        @empty
+                            <tr>
+                                <td colspan="6" class="p-16 text-center">
+                                    <x-icon name="o-check-circle" class="w-12 h-12 text-gray-200 mx-auto mb-4" />
+                                    <p class="text-gray-400 font-black uppercase text-xs tracking-widest">Tudo em dia!
+                                        Nenhuma pendência.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        @endif
     </div>
-@endif
+</div>

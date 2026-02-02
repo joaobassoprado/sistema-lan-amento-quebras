@@ -29,31 +29,28 @@ Route::prefix('/erros')->group(function () {
 });
 
 // ---------------------------------------------------------------------
-// ÁREA LOGADA (REQUER AUTENTICAÇÃO)
+// ÁREA LOGADA (SOMENTE AUTH)
 // ---------------------------------------------------------------------
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
-    // Redirecionamento inicial
     Route::get('/', fn () => redirect()->route('dashboard'));
 
-    // Dashboard
     Volt::route('/dashboard', 'dashboard')->name('dashboard');
 
     // -----------------------------------------------------------------
     // MÓDULO DE QUEBRAS
     // -----------------------------------------------------------------
     Route::prefix('/quebras')->group(function () {
-
-        // Acesso comum
+        
+        // TODOS TÊM ACESSO (O controle é feito dentro do componente se necessário)
         Volt::route('/lancar', 'quebras.create')
             ->name('quebras.create');
 
-        Volt::route('/resumo', 'quebras.resumo')
+        Volt::route('/resumo', 'quebras.resumo') // Ajustado para bater com o arquivo resumo.blade
             ->name('quebras.resumo');
 
-        // 🔐 SOMENTE ADMIN
+        // ADMIN VÊ A TELA, USUÁRIO COMUM VÊ O "ACESSO RESTRITO"
         Volt::route('/pendentes', 'quebras.pendentes')
-
             ->name('quebras.pendentes');
     });
 
@@ -66,20 +63,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // -----------------------------------------------------------------
-    // APIs DE BUSCA
+    // APIs DE BUSCA (UTILIZADAS NO FORMULÁRIO DE LANÇAMENTO)
     // -----------------------------------------------------------------
     Route::get('/api/produtos', function (Request $request) {
         $q = trim($request->get('q'));
-        if (strlen($q) < 3) {
-            return [];
-        }
+        if (strlen($q) < 3) return [];
 
-        return Produto::select('id', 'nome')
-            ->where('ativo', 1)
-            ->where(function ($query) use ($q) {
-                $query->where('nome', 'like', "{$q}%")
-                      ->orWhere('codigo_externo', 'like', "{$q}%");
-            })
+        return Produto::on200()->select('código as id', 'nome')
+            ->where('nome', 'like', "{$q}%")
+            ->orWhere('código', 'like', "{$q}%")
             ->orderBy('nome')
             ->limit(10)
             ->get();
@@ -87,16 +79,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/api/funcionarios', function (Request $request) {
         $q = trim($request->get('q'));
-        if (strlen($q) < 3) {
-            return [];
-        }
+        if (strlen($q) < 3) return [];
 
-        return Funcionario::select('id', 'nome')
-            ->where('ativo', 1)
-            ->where(function ($query) use ($q) {
-                $query->where('nome', 'like', "{$q}%")
-                      ->orWhere('codigo_externo', 'like', "{$q}%");
-            })
+        return Funcionario::on200()->select('codigo as id', 'nome')
+            ->where('nome', 'like', "%{$q}%")
             ->orderBy('nome')
             ->limit(10)
             ->get();
@@ -107,18 +93,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // -----------------------------------------------------------------
     Route::prefix('/admin')->group(function () {
 
-        // Exportações
         Volt::route('/exportar', 'admin.exports.index')
             ->name('admin.exports.index');
 
-        // Usuários
         Route::prefix('/usuarios')->group(function () {
             Volt::route('/', 'admin.users.index')->name('admin.users.index');
             Volt::route('/novo', 'admin.users.create')->name('admin.users.create');
             Volt::route('/editar/{id}', 'admin.users.update')->name('admin.users.update');
         });
 
-        // Perfis e Permissões
         Route::prefix('/perfis')->group(function () {
             Volt::route('/', 'admin.profile.index')->name('admin.profile.index');
             Volt::route('/editar/{id}', 'admin.profile.update')->name('admin.profile.update');
@@ -128,7 +111,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-// ---------------------------------------------------------------------
-// ROTAS DE AUTENTICAÇÃO
-// ---------------------------------------------------------------------
 require __DIR__ . '/auth.php';

@@ -4,18 +4,8 @@ use Illuminate\Support\Str;
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Default Database Connection Name
-    |--------------------------------------------------------------------------
-    */
     'default' => env('DB_CONNECTION', 'mysql'),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Database Connections
-    |--------------------------------------------------------------------------
-    */
     'connections' => [
 
         'sqlite' => [
@@ -28,56 +18,48 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | BANCO LOCAL (QUEBRAS)
+        | BANCO LOCAL (QUEBRAS - DOCKER)
         |--------------------------------------------------------------------------
         */
         'mysql' => [
-            'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'driver'      => 'mysql',
+            'url'         => env('DATABASE_URL'),
+            'host'        => env('DB_HOST', 'mysql'),   // ← CORRIGIDO AQUI
+            'port'        => env('DB_PORT', '3306'),
+            'database'    => env('DB_DATABASE', 'quebras_v2'),
+            'username'    => env('DB_USERNAME', 'dev'),
+            'password'    => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
+            'charset'     => 'utf8mb4',
+            'collation'   => 'utf8mb4_unicode_ci',
+            'prefix'      => '',
             'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
+            'strict'      => true,
+            'engine'      => null,
+            'options'     => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 
         /*
         |--------------------------------------------------------------------------
-        | 🔒 BANCO 200 - PRODUÇÃO (SOMENTE LEITURA)
+        | BANCO 200 - PRODUÇÃO (APENAS LEITURA)
         |--------------------------------------------------------------------------
         */
         'db200' => [
-            'driver' => 'mysql',
-            'host' => env('DB200_HOST'),
-            'port' => env('DB200_PORT', 3306),
-            'database' => env('DB200_DATABASE'),
-            'username' => env('DB200_USERNAME'),
-            'password' => env('DB200_PASSWORD'),
-            'charset' => 'utf8',
-            'collation' => 'utf8_general_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-            'options' => [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            ],
-        ],
+    'driver'    => 'mysql', // Ou env('DB200_CONNECTION', 'mysql')
+    'host'      => env('DB200_HOST', '10.4.0.200'),
+    'port'      => env('DB200_PORT', '3306'),
+    'database'  => env('DB200_DATABASE', 'bases'),
+    'username'  => env('DB200_USERNAME', 'mapeamento_trajeto'),
+    'password'  => env('DB200_PASSWORD', '@Gm081223'),
+    'charset'   => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+    'prefix'    => '',
+    'strict'    => false,
+    'engine'    => null,
+],
 
-        /*
-        |--------------------------------------------------------------------------
-        | POSTGRES (DW / BI)
-        |--------------------------------------------------------------------------
-        */
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
@@ -107,18 +89,8 @@ return [
         ],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Migration Repository Table
-    |--------------------------------------------------------------------------
-    */
     'migrations' => 'migrations',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Redis Databases
-    |--------------------------------------------------------------------------
-    */
     'redis' => [
 
         'client' => env('REDIS_CLIENT', 'phpredis'),

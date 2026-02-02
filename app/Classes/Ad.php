@@ -2,24 +2,33 @@
 
 namespace App\Classes;
 
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class Ad
 {
-    public static function username()
+    public static function username(): ?string
     {
         $user = Auth::user();
 
-        if (!$user) {
-            return view('erros.401', []);
+        if (! $user) {
+            return null;
         }
 
-        return Auth::user()->samaccountname[0];
+        /**
+         * 🔧 Tratamento para LDAP/AD
+         * O AD retorna atributos como arrays (ex: ['Nome']). 
+         * Se for um array, pegamos o primeiro índice.
+         */
+        if (is_array($user->name)) {
+            return $user->name[0] ?? null;
+        }
+
+        return $user->name;
     }
 
-    public static function unidade()
+    public static function unidade(): ?string
     {
-        return User::firstWhere('name', self::username())->unidade;
+        // AD removido → não existe unidade
+        return null;
     }
 }

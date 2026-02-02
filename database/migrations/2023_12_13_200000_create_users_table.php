@@ -6,27 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->string('nome_completo');
-            $table->foreignId('profile_id')->nullable()->constrained('profiles')->onDelete('cascade');
-            $table->string('created_by');
-            $table->string('updated_by');
+
+            // LOGIN
+            $table->string('name')->unique(); // usuário
+            $table->string('password');
+
+            // DADOS
+            $table->string('nome_completo')->nullable();
+            $table->foreignId('profile_id')->nullable()->constrained('profiles')->nullOnDelete();
+
+            // AUDITORIA
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
+
+            $table->rememberToken();
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
